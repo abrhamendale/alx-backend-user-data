@@ -37,6 +37,7 @@ class RedactingFormatter(logging.Formatter):
     FIELDS = ""
 
     def __init__(self, fields):
+        """Initializes new redacting formatter classes."""
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.FIELDS = fields
 
