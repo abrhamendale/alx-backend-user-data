@@ -7,19 +7,25 @@ import re
 import logging
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
-    """Obsufcator function"""
-    for i in fields:
-        message = re.sub(i + "=[\d\w\S][^" + separator + "]*" + separator, i + "=" + redaction + ";", message)
-    return (message)
 """
 return (message)
 message = re.sub(i + "=[\d\w\S][^;]*;", i + "=" + redaction + ";", message)
 obf = i + "=[\d\w\S][^;]*;"
 fld = i + "=" + redaction + ";"
 message = re.sub(p, "password="+redaction+";", message)
-#message = re.sub("password=[\d\w]*;", "password="+redaction+";", message)
+message = re.sub("password=[\d\w]*;", "password="+redaction+";", message)
 """
+
+def filter_datum_helper(fields: List[str], redaction: str, message: str, separator: str) -> str:
+    """Obsufcator function"""
+    for i in fields:
+        message = re.sub(i + "=[\d\w\S][^" + separator + "]*" + separator, i + "=" + redaction + ";", message)
+    return (message)
+
+def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
+    """Obsufcator function"""
+    return (filter_datum_helper(fields, redaction, message, separator))
+
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
