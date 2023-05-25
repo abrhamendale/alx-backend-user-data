@@ -7,7 +7,7 @@ import re
 import logging
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> List[str]:
+def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
     """Obsufcator function"""
     if fields == None:
         return (message)
