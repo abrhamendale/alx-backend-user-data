@@ -83,3 +83,6 @@ def main():
     rows = cur.fetchall()
     for i in rows:
         print(i)
+
+if __name__ == '__main__':
+        main()
