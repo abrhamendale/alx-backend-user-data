@@ -73,3 +73,13 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
                                   host,
                                   database)
     return (cnx)
+
+
+def main():
+    """Queries a database."""
+    cnx = get_db()
+    cur = cnx.cursor()
+    cur.execute("SELECT * FROM customers")
+    rows = cur.fetchall()
+    for i in rows:
+        print(i)
