@@ -12,9 +12,10 @@ def filter_datum(fields: List[str], redaction: str, message: str, separator: str
     if fields == None:
         return (message)
     for i in fields:
-        message = re.sub(i + "=[\d\w\S][^;]*;", i + "=" + redaction + ";", message)
+        message = re.sub(i + "=[\d\w\S][^" + separator + "]*;", i + "=" + redaction + ";", message)
     return (message)
 """
+message = re.sub(i + "=[\d\w\S][^;]*;", i + "=" + redaction + ";", message)
 obf = i + "=[\d\w\S][^;]*;"
 fld = i + "=" + redaction + ";"
 message = re.sub(p, "password="+redaction+";", message)
