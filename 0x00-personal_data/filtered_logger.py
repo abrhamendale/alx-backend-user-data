@@ -9,11 +9,11 @@ import logging
 
 def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> List[str]:
     for i in fields:
-        obf = i + "=[\d\w\S][^;]*;"
-        fld = i + "=" + redaction + ";"
-        message = re.sub(obf, fld, message)
+        message = re.sub(i + "=[\d\w\S][^;]*;", i + "=" + redaction + ";", message)
     return (message)
 """
+obf = i + "=[\d\w\S][^;]*;"
+fld = i + "=" + redaction + ";"
 message = re.sub(p, "password="+redaction+";", message)
 #message = re.sub("password=[\d\w]*;", "password="+redaction+";", message)
 """
