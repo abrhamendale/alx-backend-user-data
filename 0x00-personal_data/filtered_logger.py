@@ -61,7 +61,7 @@ def get_logger() -> logging.Logger:
     lg.addHandler(handle)
 
 
-def get_db():
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """Creates a connection to a database."""
     user = os.environ.get('PERSONAL_DATA_DB_USERNAME', "root")
     password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', "")
