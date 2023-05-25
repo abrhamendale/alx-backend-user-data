@@ -8,6 +8,7 @@ import logging
 
 
 def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> List[str]:
+    """Obsufcator function"""
     for i in fields:
         message = re.sub(i + "=[\d\w\S][^;]*;", i + "=" + redaction + ";", message)
     return (message)
