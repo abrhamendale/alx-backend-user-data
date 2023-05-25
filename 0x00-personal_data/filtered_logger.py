@@ -13,6 +13,7 @@ def filter_datum(fields: List[str], redaction: str, message: str, separator: str
         message = re.sub(i + "=[\d\w\S][^" + separator + "]*" + separator, i + "=" + redaction + ";", message)
     return (message)
 """
+return (message)
 message = re.sub(i + "=[\d\w\S][^;]*;", i + "=" + redaction + ";", message)
 obf = i + "=[\d\w\S][^;]*;"
 fld = i + "=" + redaction + ";"
@@ -34,5 +35,7 @@ class RedactingFormatter(logging.Formatter):
         self.FIELDS = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        print(record)
+        """Formatter class for logging."""
+        record.msg = filter_datum(self.FIELDS, "***", record.getMessage(), self.SEPARATOR)
+        print(super(RedactingFormatter, self).format(record))
         
