@@ -5,8 +5,11 @@
 from typing import List
 import re
 import logging
+import mysql.connector
+import os
 
 
+PII_FIELDS = ()
 """
 return (message)
 message = re.sub(i + "=[\d\w\S][^;]*;", i + "=" + redaction + ";", message)
@@ -45,4 +48,28 @@ class RedactingFormatter(logging.Formatter):
         """Formatter class for logging."""
         record.msg = filter_datum(self.FIELDS, "***", record.getMessage(), self.SEPARATOR).replace(";", "; ").rstrip()
         return (super(RedactingFormatter, self).format(record))
-        
+
+def get_logger() -> logging.Logger:
+    """A get logger function."""
+    lg = logging.getLogger("user_data")
+    lg.propagate = False
+    lg.setLevel(logging.INFO)
+    handle = logging.StreamHandler()
+    handle.setLevel(logging.INFO)
+    formatter = RedactingFormatter()
+    handle.setFormatter(formatter)
+    lg.addHandler(handle)
+
+
+def get_db():
+    """Creates a connection to a database."""
+    user = os.environ.get('PERSONAL_DATA_DB_USERNAME', "root")
+    password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', "")
+    host = os.environ.get('PERSONAL_DATA_DB_HOST', "localhost")
+    database = os.environ.get('PERSONAL_DATA_DB_NAME', "")
+    #name = os.environ.get('KEY_THAT_MIGHT_EXIST', default_value))
+    cnx = mysql.connector.connect(user,
+                                  password,
+                                  host,
+                                  database)
+    return (cnx)
