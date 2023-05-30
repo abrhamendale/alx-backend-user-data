@@ -27,7 +27,7 @@ class Auth:
         if reauest is None:
             return None
         if "Authorization" in request.keys():
-            return (request["Authorization"]
+            return (request["Authorization"])
         return None
 
     def current_user(self, request=None) -> TypeVar('User'):
