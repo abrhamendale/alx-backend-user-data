@@ -5,6 +5,7 @@ Authentication module.
 
 
 from flask import request
+from typing import List, TypeVar
 
 
 class Auth:
@@ -17,14 +18,18 @@ class Auth:
         """
         if path is None or excluded_paths is None:
             return True
+        if excluded_paths is []:
+            return True
         if path in excluded_paths or path + "/" in excluded_paths:
             return False
+        else:
+            return True
 
     def authorization_header(self, request=None) -> str:
         """
         handles authorization.
         """
-        if reauest is None:
+        if request is None:
             return None
         if "Authorization" in request.keys():
             return (request["Authorization"])
