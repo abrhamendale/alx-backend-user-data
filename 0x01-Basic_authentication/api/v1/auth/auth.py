@@ -25,8 +25,8 @@ class Auth:
         for i in excluded_paths:
             if re.search(i, path):
                 return False
-        #if path in excluded_paths or path + "/" in excluded_paths:
-        #    return False
+            if re.search(i, path + '/'):
+                return False
         else:
             return True
 
