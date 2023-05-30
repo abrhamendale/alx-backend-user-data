@@ -12,6 +12,7 @@ class Auth:
     """
     Auth class.
     """
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
         Checks entered path.
@@ -31,8 +32,8 @@ class Auth:
         """
         if request is None:
             return None
-        if "Authorization" in request.keys():
-            return (request["Authorization"])
+        if request.headers.get('Authorization'):
+            return (request.headers.get('Authorization'))
         return None
 
     def current_user(self, request=None) -> TypeVar('User'):

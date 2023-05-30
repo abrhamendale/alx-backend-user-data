@@ -7,12 +7,27 @@ from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 import os
+from api.v1.auth.auth import Auth
 
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
+
+
+@app.before_request
+def before_request():
+    """Retrieves the path.
+    """
+    if auth:
+        if auth.require_auth(request.path,
+                             ['/api/v1/status/', '/api/v1/unauthorized/',
+                              '/api/v1/forbidden/']):
+            if not auth.authorization_header(request):
+                abort(401)
+            if not auth.current_user(request):
+                abort(403)
 
 
 @app.errorhandler(401)
@@ -39,4 +54,10 @@ def not_found(error) -> str:
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
+    auth = getenv("AUTH_TYPE")
+    if auth == "basic_auth":
+        from api.v1.auth.basic_auth import BasicAuth
+        auth = BasicAuth()
+    if auth == "auth":
+        auth = Auth()
     app.run(host=host, port=port)
