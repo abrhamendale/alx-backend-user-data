@@ -51,8 +51,8 @@ class BasicAuth(Auth):
         if ':' not in decoded_base64_authorization_header:
             return (None, None)
         try:
-            return (str(decoded_base64_authorization_header.split(":", 1)[0]),
-                    str(decoded_base64_authorization_header.split(":", 1)[1]))
+            return (str(decoded_base64_authorization_header.split(":")[0]),
+                    str(decoded_base64_authorization_header.split(":")[1]))
         except ValueError:
             return (None, None)
 
