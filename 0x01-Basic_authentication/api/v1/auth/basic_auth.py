@@ -93,7 +93,7 @@ class BasicAuth(Auth):
             ad_64 = self.extract_base64_authorization_header(ad)
             print(ad_64)
         if ad_64:
-            ad_64_str = decode_base64_authorization_header(ad_64)
+            ad_64_str = self.decode_base64_authorization_header(ad_64)
             print(ad_64_str)
         if ad_64_str:
             user_cred = self.extract_user_credentials(ad_64_str)
