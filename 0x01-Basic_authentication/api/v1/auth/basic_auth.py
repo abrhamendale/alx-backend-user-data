@@ -84,8 +84,10 @@ class BasicAuth(Auth):
     def current_user(self, request=None) -> TypeVar('User'):
         """
         Implements a basic authentication.
+
         """
-        ad = self.authorization_header(self, request)
+        print("current_user")
+        ad = self.authorization_header(request)
         print(ad)
         if ad:
             ad_64 = self.extract_base64_authorization_header(ad)
