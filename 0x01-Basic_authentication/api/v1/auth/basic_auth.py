@@ -86,14 +86,19 @@ class BasicAuth(Auth):
         Implements a basic authentication.
         """
         ad = self.authorization_header(self, request)
+        print(ad)
         if ad:
             ad_64 = self.extract_base64_authorization_header(ad)
+            print(ad_64)
         if ad_64:
             ad_64_str = decode_base64_authorization_header(ad_64)
+            print(ad_64_str)
         if ad_64_str:
             user_cred = self.extract_user_credentials(ad_64_str)
+            print(user_cred)
         if user_cred:
             user_inst = self.user_object_from_credentials(user_cred[0],
                                                           user_cred[1])
+            print(user_inst)
             return user_inst
         return None
