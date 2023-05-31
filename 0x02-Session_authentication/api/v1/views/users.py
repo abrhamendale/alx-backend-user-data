@@ -29,8 +29,11 @@ def view_one_user(user_id: str = None) -> str:
         abort(404)
     if user_id == "me" and request.current_user is None:
         abort(404)
-    print(request.current_user.__dict__)
-    #if user_id == me and request.current_user is not None:
+    if user_id == me and request.current_user is not None:
+        user = User.get(request.current_user.id)
+        if user is None:
+            abort(404)
+        return jsonify(user.to_json())
     user = User.get(user_id)
     if user is None:
         abort(404)
