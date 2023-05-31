@@ -86,7 +86,11 @@ class BasicAuth(Auth):
         Implements a basic authentication.
 
         """
-        print("current_user")
+        ad = None
+        ad_64 = None
+        ad_64_str = None
+        user_cred = None
+        user_inst = None
         ad = self.authorization_header(request)
         print(ad)
         if ad:
