@@ -45,3 +45,13 @@ def sess_auth():
             pass
     return jsonify({ "error": "wrong password" })
     """
+
+@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes = True)
+def del_user():
+    """
+    Delete user view function.
+    """
+    from api.v1.app import auth
+    if not auth.destroy_session(request):
+        abort(404)
+    return jsonify({}), 200
