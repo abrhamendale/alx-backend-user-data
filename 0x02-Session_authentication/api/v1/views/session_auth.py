@@ -22,7 +22,8 @@ def sess_auth():
     if p_word is None or p_word == "":
         return jsonify({ "error": "password missing"}), 400
     c_user = User.search({'email': mail})
-    c_user = c_user[0]
+    if c_user:
+        c_user = c_user[0]
     if not c_user:
         return jsonify({ "error": "no user found for this email"}), 404
     else:
