@@ -50,7 +50,6 @@ class SessionExpAuth(SessionAuth):
             return None
         if session_id not in self.user_id_by_session_id.keys():
             return None
-        print("111")
         s_dct = self.user_id_by_session_id[session_id]
         if self.session_duration <= 0:
             return s_dct['user_id']
@@ -58,7 +57,6 @@ class SessionExpAuth(SessionAuth):
             return None
         dur = self.session_duration * timedelta(seconds=1)
         if (s_dct['created_at'] + dur) < datetime.now():
-            print("Sessssion")
             return None
         else:
             return s_dct['user_id']
@@ -68,7 +66,5 @@ class SessionExpAuth(SessionAuth):
         Returns a User instance based on a cookie value.
         """
         session_id = self.session_cookie(request)
-        print("session id.py", session_id)
         uid = self.user_id_for_session_id(session_id)
-        print(uid)
         return User.get(uid)
