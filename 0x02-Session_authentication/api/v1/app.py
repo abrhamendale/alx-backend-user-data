@@ -14,7 +14,15 @@ from api.v1.views import index
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
-auth = None
+auth = getenv("AUTH_TYPE")
+if auth == "basic_auth":
+    from api.v1.auth.basic_auth import BasicAuth
+    auth = BasicAuth()
+if auth == "auth":
+    auth = Auth()
+if auth == "session_auth":
+    from api.v1.auth.session_auth import SessionAuth
+    auth = SessionAuth()
 
 
 @app.before_request
@@ -59,6 +67,7 @@ def not_found(error) -> str:
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
+    """
     auth = getenv("AUTH_TYPE")
     if auth == "basic_auth":
         from api.v1.auth.basic_auth import BasicAuth
@@ -68,4 +77,5 @@ if __name__ == "__main__":
     if auth == "session_auth":
         from api.v1.auth.session_auth import SessionAuth
         auth = SessionAuth()
+    """
     app.run(host=host, port=port)

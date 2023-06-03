@@ -6,6 +6,7 @@ Session module.
 
 from api.v1.auth.auth import Auth
 import uuid
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -41,4 +42,7 @@ class SessionAuth(Auth):
         Returns a User instance based on a cookie value.
         """
         session_id = self.session_cookie(request)
-        return self.user_id_for_session_id(session_id)
+        print(session_id)
+        uid = self.user_id_for_session_id(session_id)
+        print(uid)
+        return User.get(uid)
