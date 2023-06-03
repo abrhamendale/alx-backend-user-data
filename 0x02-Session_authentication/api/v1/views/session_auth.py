@@ -10,7 +10,7 @@ from models.user import User
 import os
 
 
-@app_views.route('/auth_session/login', methods=['POST'], strict_slashes = False)
+@app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def sess_auth():
     """
     View function for session authentication.
@@ -18,17 +18,17 @@ def sess_auth():
     mail = request.form.get('email')
     p_word = request.form.get('password')
     if mail is None or mail == "":
-        return jsonify({ "error": "email missing"}), 400
+        return jsonify({"error": "email missing"}), 400
     if p_word is None or p_word == "":
-        return jsonify({ "error": "password missing"}), 400
+        return jsonify({"error": "password missing"}), 400
     c_user = User.search({'email': mail})
     if c_user:
         c_user = c_user[0]
     if not c_user:
-        return jsonify({ "error": "no user found for this email"}), 404
+        return jsonify({"error": "no user found for this email"}), 404
     else:
         if not c_user.is_valid_password(p_word):
-            return jsonify({ "error": "wrong password"}), 401
+            return jsonify({"error": "wrong password"}), 401
         else:
             from api.v1.app import auth
             s_id = auth.create_session(c_user.id)
@@ -46,7 +46,8 @@ def sess_auth():
     return jsonify({ "error": "wrong password" })
     """
 
-@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes = True)
+
+@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=True)
 def del_user():
     """
     Delete user view function.
