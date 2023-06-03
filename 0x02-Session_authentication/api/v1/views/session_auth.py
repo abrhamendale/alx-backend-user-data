@@ -7,6 +7,7 @@ Session authentication view module.
 from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models.user import User
+import os
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes = False)
@@ -20,19 +21,20 @@ def sess_auth():
         return jsonify({ "error": "email missing"}), 400
     if p_word is None or p_word == "":
         return jsonify({ "error": "password missing"}), 400
-    user = User.search({'email': mail})
-    print(mail, " ", p_word, user)
-    if not user:
+    c_user = User.search({'email': mail})
+    c_user = c_user[0]
+    if not c_user:
         return jsonify({ "error": "no user found for this email"}), 404
-    if not user[0].is_valid_password(p_word):
-        return jsonify({ "error": "wrong password"}), 401
     else:
-        from api.v1.app import auth
-        auth.create_session(user[0].id)
-        ret_value = user[0].to_json()
-        ret_value.set_cookie(os.getenv(SESSION_NAME), )
-        return ret_value
-
+        if not c_user.is_valid_password(p_word):
+            return jsonify({ "error": "wrong password"}), 401
+        else:
+            from api.v1.app import auth
+            s_id = auth.create_session(c_user.id)
+            ret_value = jsonify(c_user.to_json())
+            c_name = os.getenv('SESSION_NAME')
+            ret_value.set_cookie(c_name, s_id)
+            return ret_value
     """
     if isinstance(user_pwd, str) is False:
         return None
