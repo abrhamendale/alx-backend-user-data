@@ -19,21 +19,25 @@ class SessionExpAuth(SessionAuth):
         """
         Initializes new sessionexpauth instances.
         """
-        try:
-            s = int(os.getenv('SESSION_DURATION'))
-        except ValueError:
-            s = 0
-        if s:
-            self.session_duration = s
-        else:
+        if not os.getenv('SESSION_DURATION'):
             self.session_duration = 0
+        else:
+            try:
+                s = int(os.getenv('SESSION_DURATION'))
+            except ValueError:
+                s = 0
+            if s:
+                self.session_duration = s
+            else:
+                self.session_duration = 0
 
     def create_session(self, user_id=None):
         """
         Creates a new session.
         """
+        if not user_id:
+            return None
         se_id = super().create_session(user_id)
-        print(se_id)
         if not se_id:
             return None
         session_dictionary = {}
