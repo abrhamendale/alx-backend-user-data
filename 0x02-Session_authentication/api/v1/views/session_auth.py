@@ -21,13 +21,14 @@ def sess_auth():
     if p_word is None or p_word == "":
         return jsonify({ "error": "password missing"}), 400
     user = User.search({'email': mail})
+    print(mail, " ", p_word, user)
     if not user:
         return jsonify({ "error": "no user found for this email"}), 404
     if not user[0].is_valid(p_word):
         return jsonify({ "error": "wrong password"}), 401
     else:
         from api.v1.app import auth
-        app.auth.create_session(user[0].id)
+        auth.create_session(user[0].id)
         return user[0].to_json()
     """
     if isinstance(user_pwd, str) is False:
