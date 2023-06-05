@@ -10,6 +10,27 @@ import json
 from datetime import datetime
 
 
+def serialize_dict(idct):
+    """
+    Serializes a dictionary including datetime.
+    """
+    for i in idct:
+        dat = idct[i]['created_at']
+        idct[i]['created_at'] = dat.strftime('%y-%m-%d %H:%M:%S.%f')
+    return idct
+
+
+def deserialize_dict(idct):
+    """
+    Deserializes a dictionary including datetime.
+    """
+    for i in idct.keys():
+        d = idct[i]['created_at']
+        dat = datetime.strptime(d, '%y-%m-%d %H:%M:%S.%f')
+        idct[i]['created_at'] = dat
+    return idct
+
+
 class SessionDBAuth(SessionExpAuth):
     """
     A class for DB based authentication.
@@ -21,6 +42,29 @@ class SessionDBAuth(SessionExpAuth):
         """
         super().__init__()
 
+    """
+    @classmethod
+    def serialize_dict(idct):
+        
+        Serializes a dictionary including datetime.
+        
+        for i in idct:
+            dat = idct[i]['created_at']
+            idct[i]['created_at'] = dat.strftime('%y-%m-%d %H:%M:%S.%f')
+        return idct
+
+    @classmethod
+    def deserialize_dict(idct):
+        
+        Deserializes a dictionary including datetime.
+        
+        for i in idict.keys():
+            d = idict[i]['created_at']
+            dat = datetime.strptime(d, '%y-%m-%d %H:%M:%S.%f')
+            idict[i]['created_at'] = dat
+        return idict
+    """
+
     def create_session(self, user_id=None):
         """
         Creates and stores new instance of
@@ -31,9 +75,8 @@ class SessionDBAuth(SessionExpAuth):
         se_id = super().create_session(user_id)
         if se_id:
             with open("session_db", "w") as fw:
-                for i in self.user_id_by_session_id.keys():
-                    dat = self.user_id_by_session_id[i]['created_at']
-                    self.user_id_by_session_id[i]['created_at'] = dat.strftime('%y-%m-%d %H:%M:%S.%f')
+                dat = self.user_id_by_session_id
+                self.user_id_by_session_id = serialize_dict(dat)
                 json.dump(self.user_id_by_session_id, fw)
         return se_id
 
@@ -46,10 +89,8 @@ class SessionDBAuth(SessionExpAuth):
             return None
         with open("session_db", "r") as fr:
             self.user_id_by_session_id = json.load(fr)
-            for i in self.user_id_by_session_id.keys():
-                d = self.user_id_by_session_id[i]['created_at']
-                dat = datetime.strptime(d, '%y-%m-%d %H:%M:%S.%f')
-                self.user_id_by_session_id[i]['created_at'] = dat
+            d = self.user_id_by_session_id
+            self.user_id_by_session_id = deserialize_dict(d)
         return super().user_id_for_session_id(session_id)
 
     def destroy_session(self, request=None):
@@ -65,20 +106,16 @@ class SessionDBAuth(SessionExpAuth):
         if self.user_id_for_session_id(s_id):
             del self.user_id_by_session_id[s_id]
             with open("session_db", "w") as fw:
-                for i in self.user_id_by_session_id.keys():
-                    dat = self.user_id_by_session_id[i]['created_at']
-                    self.user_id_by_session_id[i]['created_at'] = dat.strftime('%y-%m-%d %H:%M:%S.%f')
+                dat = self.user_id_by_session_id
+                self.user_id_by_session_id = serialize_dict(dat)
                 json.dump(self.user_id_by_session_id, fw)
         else:
             with open("session_db", "rw") as frw:
                 self.user_id_by_session_id = json.load(frw)
-                for i in self.user_id_by_session_id.keys():
-                    d = self.user_id_by_session_id[i]['created_at']
-                    dat = datetime.strptime(d, '%y-%m-%d %H:%M:%S.%f')
-                    self.user_id_by_session_id[i]['created_at'] = dat
+                d = self.user_id_by_session_id
+                self.user_id_by_session_id = deserialize_dict(d)
                 if self.user_id_for_session_id(s_id):
                     del self.user_id_by_session_id[s_id]
-                    for i in self.user_id_by_session_id.keys():
-                        dat = self.user_id_by_session_id[i]['created_at']
-                        self.user_id_by_session_id[i]['created_at'] = dat.strftime('%y-%m-%d %H:%M:%S.%f')
+                    dat = self.user_id_by_session_id
+                    self.user_id_by_session_id = serialize_dict(dat)
                     json.dump(self.user_id_by_session_id, frw)
