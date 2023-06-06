@@ -6,6 +6,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from user import Base, User
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
+import bcrypt
 
 
 class DB:
@@ -41,9 +44,21 @@ class DB:
         self._session.commit()
         return user_1
 
-    def find_user_by(self, em: str):
+    def find_user_by(self, **kwargs):
         """
         Finds a user by input string em.
         """
-        for row in self._session.query(User).\filter_by(email=em):
-            return row
+        ret_value = self._session.query(User).filter_by(**kwargs).first()
+        if ret_value:
+            return ret_value
+        else:
+            raise NoResultFound
+
+    def update_user(self, u_id, **kwargs):
+        """
+        Updates a user.
+        """
+        u = self.find_user_by(id = u_id)
+        for key, value in kwargs.items():
+            setattr(u, key, value)
+        self.__session.commit()
