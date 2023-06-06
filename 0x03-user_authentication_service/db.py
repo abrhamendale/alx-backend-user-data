@@ -45,6 +45,8 @@ class DB:
         if not em or not h_p:
             return None
         user_1 = User(email=em, hashed_password=h_p)
+        if not user_1:
+            return None
         self._session.add(user_1)
         self._session.commit()
         return user_1
