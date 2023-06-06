@@ -29,8 +29,8 @@ def users():
     p_w = request.form.get("password")
     try:
         user = AUTH.register_user(em, p_w)
-        return jsonify({"email": "<registered email>", "message": "user created"})
-    except:
+        return jsonify({"email": em, "message": "user created"})
+    except ValueError:
         return jsonify({"message": "email already registered"}), 400
 
 
@@ -42,14 +42,13 @@ def login():
     em = request.form.get("email")
     p_w = request.form.get("password")
     print("eeemmmaaiiill", em, p_w)
-    if not AUTH._db.find_user_by(email = em):
+    if not AUTH._db.find_user_by(email=em):
         abort(401)
     else:
         s_id = AUTH.create_session(em)
         resp = make_response({"email": em, "message": "logged in"})
         resp.set_cookie('session_id', str(s_id))
         return resp
-        #return jsonify({"email": em, "message": "logged in"})
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
@@ -58,7 +57,7 @@ def logout():
     Logs out a user.
     """
     s_id = request.cookie.get("session_id")
-    if not AUTH._db.find_user_by(session_id = s_id):
+    if not AUTH._db.find_user_by(session_id=s_id):
         abort(403)
     else:
         AUTH.destroy_session(s_id)
@@ -70,7 +69,7 @@ def profile():
     /profile route handler.
     """
     s_id = request.cookies.get("session_id")
-    usr = AUTH._db.find_user_by(session_id = s_id)
+    usr = AUTH._db.find_user_by(session_id=s_id)
     if not usr:
         abort(403)
     else:
@@ -84,7 +83,7 @@ def get_reset_password_token():
     """
     em = requests.form.get("email")
     try:
-        usr = AUTH._db.find_user_by("email" = em)
+        usr = AUTH._db.find_user_by(email=em)
         r_t = Auth.get_reset_password_token(em)
         return jsonify({"email": em, "reset_token": r_t})
     except NotFoundError:
@@ -104,6 +103,7 @@ def update_password():
         return jsonify({"email": e_m, "message": "Password updated"}), 200
     except NoResultFound:
         abort(403)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
