@@ -83,3 +83,42 @@ class Auth:
         except NoResultFound:
             return None
 
+    def get_user_from_session_id(s_id: str):
+        """
+        Retrieves a user.
+        Find_user_by
+        """
+        ret_value = AUTH._db._session.query(User).filter_by(session_id = s_id).first()
+        return ret_value
+
+    def destroy_session(u_id: str):
+        """
+        Deletes a user.
+        """
+        usr = self._db.find_user_by(user_id = u_id)
+        usr.session_id = None
+        self._db._session.commit()
+        return None
+
+    def get_reset_password_token(em: str):
+        """
+        Resets a password.
+        """
+        try:
+            usr = self._db.find_user_by(email = em)
+            usr.reset_token = self._generate_uuid()
+            return usr.reset_token
+        except NoResultFound:
+            raise ValueError
+
+    def update_password(r_t: str, p_w str):
+        """
+        Updates a password for a user.
+        """
+        try:
+            usr = self._db.find_user_by(reset_token = r_t))
+            usr.hashed_password = _hash_password(p_w)
+            usr.reset_token = None
+            self._db._session.commit()
+        except NoResultFound:
+            raise ValueError
