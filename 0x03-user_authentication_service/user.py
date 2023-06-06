@@ -5,10 +5,12 @@ User authentication.
 
 
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
 
 
 Base = declarative_base()
-from sqlalchemy import Column, Integer, String
+
+
 class User(Base):
     """
     A user class for users.
@@ -25,4 +27,5 @@ class User(Base):
         """
         returns the string representation of the class.
         """
-        return "<User(name='%s', fullname='%s', nickname='%s')>" % (self.name, self.fullname, self.nickname)
+        return "<User(name='%s', fullname='%s', nickname='%s')>" % (
+                            self.name, self.fullname, self.nickname)
