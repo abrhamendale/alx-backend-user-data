@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """DB module
 """
+
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -9,6 +11,7 @@ from user import Base, User
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 import bcrypt
+from typing import TypeVar
 
 
 class DB:
@@ -20,7 +23,7 @@ class DB:
         """
         Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db", echo=True)
+        self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -35,16 +38,16 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, em: str, h_p:str):
+    def add_user(self, em: str, h_p: str) -> TypeVar(User):
         """
         A function to add a user.
         """
-        user_1 = User(email = em, hashed_password = h_p)
+        user_1 = User(email=em, hashed_password=h_p)
         self._session.add(user_1)
         self._session.commit()
         return user_1
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs) -> TypeVar(User):
         """
         Finds a user by input string em.
         """
@@ -54,11 +57,11 @@ class DB:
         else:
             raise NoResultFound
 
-    def update_user(self, u_id, **kwargs):
+    def update_user(self, u_id, **kwargs) -> None:
         """
         Updates a user.
         """
-        u = self.find_user_by(id = u_id)
+        u = self.find_user_by(id=u_id)
         for key, value in kwargs.items():
             setattr(u, key, value)
         self.__session.commit()
