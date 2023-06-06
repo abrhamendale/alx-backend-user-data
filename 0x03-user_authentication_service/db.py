@@ -42,6 +42,8 @@ class DB:
         """
         A function to add a user.
         """
+        if not em or not h_p:
+            return None
         user_1 = User(email=em, hashed_password=h_p)
         self._session.add(user_1)
         self._session.commit()
@@ -66,6 +68,6 @@ class DB:
             if hasattr(u, key):
                 setattr(u, key, value)
             else:
-                raise ValueError
+                raise ValueError()
         self._session.commit()
         return None
