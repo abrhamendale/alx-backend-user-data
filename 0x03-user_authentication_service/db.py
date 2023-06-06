@@ -63,5 +63,9 @@ class DB:
         """
         u = self.find_user_by(id=u_id)
         for key, value in kwargs.items():
-            setattr(u, key, value)
-        self.__session.commit()
+            try:
+                setattr(u, key, value)
+            except InvalidRequestError:
+                raise ValueError
+        self._session.commit()
+        return None
