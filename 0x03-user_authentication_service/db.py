@@ -11,7 +11,7 @@ from user import Base, User
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 import bcrypt
-from typing import TypeVar
+from typing import TypeVar, Union
 
 
 class DB:
@@ -38,7 +38,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, em: str, h_p: str) -> User:
+    def add_user(self, em: str, h_p: str) -> Union[User, None]:
         """
         A function to add a user.
         """
