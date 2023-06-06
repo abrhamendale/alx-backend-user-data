@@ -19,7 +19,7 @@ class DB:
     DB class
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize a new DB instance
         """
@@ -38,7 +38,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, em: str, h_p: str) -> TypeVar(User):
+    def add_user(self, em: str, h_p: str) -> User:
         """
         A function to add a user.
         """
