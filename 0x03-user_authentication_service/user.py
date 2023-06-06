@@ -25,5 +25,4 @@ class User(Base):
         """
         returns the string representation of the class.
         """
-        return "<User(name='%s', fullname='%s', nickname='%s')>"
-                % (self.name, self.fullname, self.nickname)
+        return "<User(name='%s', fullname='%s', nickname='%s')>" % (self.name, self.fullname, self.nickname)
