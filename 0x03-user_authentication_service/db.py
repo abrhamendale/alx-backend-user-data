@@ -57,7 +57,7 @@ class DB:
         else:
             raise NoResultFound
 
-    def update_user(self, u_id, **kwargs) -> None:
+    def update_user(self, u_id: str, **kwargs) -> None:
         """
         Updates a user.
         """
