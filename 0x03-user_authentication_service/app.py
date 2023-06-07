@@ -20,6 +20,14 @@ def unauthorized(error) -> str:
     return jsonify({"error": "Unauthorized"}), 401
 
 
+@app.errorhandler(403)
+def unauthorized(error) -> str:
+    """
+    Unauthorized handler
+    """
+    return jsonify({"error": "Unauthorized"}), 403
+
+
 @app.route('/', methods=['GET'], strict_slashes=False)
 def route_1():
     """
@@ -63,11 +71,12 @@ def logout():
     """
     Logs out a user.
     """
-    s_id = request.cookie.get("session_id")
-    if not AUTH._db.find_user_by(session_id=s_id):
+    s_id: str = request.cookie.get("session_id")
+    try:
+        usr = self._db.find_user_by(session_id=s_id)
+        AUTH.destroy_session(usr.session_id)
+    except NoResultFound:
         abort(403)
-    else:
-        AUTH.destroy_session(s_id)
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
