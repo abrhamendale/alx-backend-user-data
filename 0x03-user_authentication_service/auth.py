@@ -32,7 +32,7 @@ def _hash_password(p_w: str) -> Any:
     return has
 
 
-def _generate_uuid(self) -> str:
+def _generate_uuid() -> str:
     """
     generates a uuid.
     """
@@ -84,9 +84,9 @@ class Auth:
 
     """
     def _generate_uuid(self) -> str:
-        
+
         generates a uuid.
-        
+
         return str(uuid.uuid4())
     """
 
