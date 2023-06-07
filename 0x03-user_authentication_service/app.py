@@ -80,7 +80,7 @@ def logout():
         AUTH.destroy_session(usr.session_id)
         return redirect(url_for('route_1'))
     except NoResultFound:
-        abort(403)
+        return jsonify({}), 403
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
