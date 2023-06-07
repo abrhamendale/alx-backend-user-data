@@ -7,6 +7,8 @@ App class.
 from flask import Flask, request, abort, jsonify, make_response, redirect
 from flask import url_for
 from auth import Auth
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 
 
 app = Flask(__name__)
@@ -26,7 +28,7 @@ def unauthorized(error) -> str:
     """
     Unauthorized handler
     """
-    return jsonify({"error": "Unauthorized"}), 403
+    return jsonify({"error": "Forbidden"}), 403
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
@@ -86,12 +88,12 @@ def profile():
     """
     /profile route handler.
     """
-    s_id = request.cookies.get("session_id")
-    usr = AUTH._db.find_user_by(session_id=s_id)
-    if not usr:
-        abort(403)
-    else:
+    s_id: str = request.cookies.get("session_id")
+    try:
+        usr = AUTH._db.find_user_by(session_id=s_id)
         return jsonify({"email": usr.email}), 200
+    except NoResultFound:
+        abort(403)
 
 
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
