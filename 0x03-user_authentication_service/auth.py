@@ -72,23 +72,12 @@ class Auth:
             return False
         try:
             usr: User = self._db.find_user_by(email=em)
-            if usr:
-                if bcrypt.checkpw(p_w.encode('utf-8'), usr.hashed_password):
-                    return True
-                else:
-                    return False
+            if bcrypt.checkpw(p_w.encode('utf-8'), usr.hashed_password):
+                return True
             else:
                 return False
         except NoResultFound:
             return False
-
-    """
-    def _generate_uuid(self) -> str:
-
-        generates a uuid.
-
-        return str(uuid.uuid4())
-    """
 
     def create_session(self, em: str) -> str:
         """
@@ -120,10 +109,13 @@ class Auth:
         """
         Deletes a user.
         """
-        usr: User = self._db.find_user_by(user_id=u_id)
-        usr.session_id = None
-        self._db._session.commit()
-        return None
+        try:
+            usr: User = self._db.find_user_by(user_id=u_id)
+            usr.session_id = None
+            self._db._session.commit()
+            return None
+        except NoResultFound:
+            return None
 
     def get_reset_password_token(self, em: str) -> str:
         """
