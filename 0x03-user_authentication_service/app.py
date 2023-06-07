@@ -101,7 +101,7 @@ def get_reset_password_token():
     """
     Function to respond to the POST /reset_password route.
     """
-    em: str = requests.form.get("email")
+    em: str = request.form.get("email")
     try:
         usr: User = AUTH._db.find_user_by(email=em)
         r_t: str = Auth._db.get_reset_password_token(em)
@@ -116,9 +116,9 @@ def update_password():
     Function to respond to PUT /reset_password.
     """
     try:
-        r_t: str = requests.form.get("reset_token")
-        p_w: str = requests.form.get("new_password")
-        e_m: str = requests.form.get("email")
+        r_t: str = request.form.get("reset_token")
+        p_w: str = request.form.get("new_password")
+        e_m: str = request.form.get("email")
         AUTH._db.update_password(r_t, p_w)
         return jsonify({"email": e_m, "message": "Password updated"}), 200
     except NoResultFound:
