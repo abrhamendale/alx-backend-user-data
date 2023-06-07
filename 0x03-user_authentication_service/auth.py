@@ -71,7 +71,7 @@ class Auth:
         if not isinstance(em, str) or not isinstance(p_w, str):
             return False
         try:
-            usr = self._db.find_user_by(email=em)
+            usr: User = self._db.find_user_by(email=em)
             if usr:
                 if bcrypt.checkpw(p_w.encode('utf-8'), usr.hashed_password):
                     return True
