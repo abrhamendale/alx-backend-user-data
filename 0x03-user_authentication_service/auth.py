@@ -14,13 +14,15 @@ from user import Base, User
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 import uuid
-from typing import TypeVar
+from typing import TypeVar, Any
 
 
-def _hash_password(p_w: str) -> str:
+def _hash_password(p_w: str) -> Any:
     """
     Returns a hashed password.
     """
+    if not p_w:
+        return None
     password = p_w
     byte = password.encode('utf-8')
     salt = bcrypt.gensalt()
@@ -65,7 +67,7 @@ class Auth:
         except NoResultFound:
             return False
 
-    def __generate_uuid(self) -> uuid:
+    def _generate_uuid(self) -> uuid:
         """
         generates a uuid.
         """
