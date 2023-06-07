@@ -108,9 +108,13 @@ class Auth:
         Retrieves a user.
         Find_user_by
         """
-        r = self._db._session.query(User)
-        ret_value = r.filter_by(session_id=s_id).first()
-        return ret_value
+        if not s_id:
+            return None
+        try:
+            usr: User = self._db.find_user_by(session_id=s_id)
+            return usr
+        except NoResultFound:
+            return None
 
     def destroy_session(self, u_id: int) -> None:
         """
