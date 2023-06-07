@@ -32,6 +32,13 @@ def _hash_password(p_w: str) -> Any:
     return has
 
 
+def _generate_uuid(self) -> str:
+    """
+    generates a uuid.
+    """
+    return str(uuid.uuid4())
+
+
 class Auth:
     """
     Auth class to interact with the authentication database.
@@ -61,6 +68,8 @@ class Auth:
         """
         validates a user.
         """
+        if not isinstance(em, str) or not isinstance(p_w, str):
+            return False
         try:
             usr = self._db.find_user_by(email=em)
             if usr:
@@ -73,11 +82,13 @@ class Auth:
         except NoResultFound:
             return False
 
+    """
     def _generate_uuid(self) -> str:
-        """
+        
         generates a uuid.
-        """
+        
         return str(uuid.uuid4())
+    """
 
     def create_session(self, em: str) -> str:
         """
