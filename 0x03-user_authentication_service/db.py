@@ -12,6 +12,7 @@ from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 import bcrypt
 from typing import TypeVar, Union
+#User = TypeVar("User")
 
 
 class DB:
@@ -51,7 +52,7 @@ class DB:
         self._session.commit()
         return user_1
 
-    def find_user_by(self, **kwargs) -> TypeVar(User):
+    def find_user_by(self, **kwargs) -> Union[User, None]:
         """
         Finds a user by input string em.
         """

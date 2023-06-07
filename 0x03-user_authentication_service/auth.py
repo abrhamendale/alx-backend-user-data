@@ -6,16 +6,17 @@ Auth module.
 
 import bcrypt
 from db import DB
+from user import Base, User
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from user import Base, User
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 import uuid
 from typing import TypeVar, Any, Union
 uuid4 = TypeVar("uuid4")
+User = TypeVar("User")
 
 
 def _hash_password(p_w: str) -> Any:
@@ -42,7 +43,7 @@ class Auth:
         """
         self._db = DB()
 
-    def register_user(self, em: str, pas: str) -> Union[User, None]:
+    def register_user(self, em: str, pas: str) -> User:
         """
         Registers a new user.
         """
@@ -72,13 +73,13 @@ class Auth:
         except NoResultFound:
             return False
 
-    def _generate_uuid(self) -> Union[str, None]:
+    def _generate_uuid(self) -> str:
         """
         generates a uuid.
         """
         return str(uuid.uuid4())
 
-    def create_session(self, em: str) -> Union[str, None]:
+    def create_session(self, em: str) -> str:
         """
         Creates a session ID.
         """
@@ -91,7 +92,7 @@ class Auth:
         except NoResultFound:
             return None
 
-    def get_user_from_session_id(self, s_id: str) -> Union[User, None]:
+    def get_user_from_session_id(self, s_id: str) -> User:
         """
         Retrieves a user.
         Find_user_by
@@ -109,7 +110,7 @@ class Auth:
         self._db._session.commit()
         return None
 
-    def get_reset_password_token(self, em: str) -> Union[str, None]:
+    def get_reset_password_token(self, em: str) -> str:
         """
         Resets a password.
         """
