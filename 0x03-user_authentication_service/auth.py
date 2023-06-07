@@ -41,10 +41,12 @@ class Auth:
         """
         self._db = DB()
 
-    def register_user(self, em: str, pas: str) -> TypeVar(User):
+    def register_user(self, em: str, pas: str) -> Union(User, None):
         """
         Registers a new user.
         """
+        if not em or not pas:
+            return None
         try:
             self._db.find_user_by(email=em)
             raise ValueError("User {} already exists".format(em))
