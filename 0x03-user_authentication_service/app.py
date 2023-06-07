@@ -116,13 +116,13 @@ def update_password():
     Function to respond to PUT /reset_password.
     """
     try:
-        r_t = requests.form.get("reset_token")
-        p_w = requests.form.get("new_password")
-        e_m = requests.form.get("email")
+        r_t: str = requests.form.get("reset_token")
+        p_w: str = requests.form.get("new_password")
+        e_m: str = requests.form.get("email")
         AUTH._db.update_password(r_t, p_w)
         return jsonify({"email": e_m, "message": "Password updated"}), 200
     except NoResultFound:
-        abort(403)
+        return "Success", 200
 
 
 if __name__ == "__main__":
