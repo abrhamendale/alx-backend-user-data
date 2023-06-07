@@ -12,7 +12,9 @@ from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 import bcrypt
 from typing import TypeVar, Union
-#User = TypeVar("User")
+"""
+User = TypeVar("User")
+"""
 
 
 class DB:
@@ -66,6 +68,8 @@ class DB:
         """
         Updates a user.
         """
+        if not u_id:
+            return None
         u = self.find_user_by(id=u_id)
         for key, value in kwargs.items():
             if hasattr(u, key):
