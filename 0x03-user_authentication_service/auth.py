@@ -14,7 +14,8 @@ from user import Base, User
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 import uuid
-from typing import TypeVar, Any
+from typing import TypeVar, Any, Union
+uuid4 = TypeVar("uuid4")
 
 
 def _hash_password(p_w: str) -> Any:
@@ -41,7 +42,7 @@ class Auth:
         """
         self._db = DB()
 
-    def register_user(self, em: str, pas: str) -> Union(User, None):
+    def register_user(self, em: str, pas: str) -> Union[User, None]:
         """
         Registers a new user.
         """
@@ -71,35 +72,35 @@ class Auth:
         except NoResultFound:
             return False
 
-    def _generate_uuid(self) -> uuid:
+    def _generate_uuid(self) -> Union[str, None]:
         """
         generates a uuid.
         """
         return str(uuid.uuid4())
 
-    def create_session(self, em: str) -> uuid:
+    def create_session(self, em: str) -> Union[str, None]:
         """
         Creates a session ID.
         """
         try:
             usr = self._db.find_user_by(email=em)
             s_id = self._generate_uuid()
-            usr.session_id = str(s_id)
+            usr.session_id = s_id
             self._db._session.commit()
             return s_id
         except NoResultFound:
             return None
 
-    def get_user_from_session_id(s_id: str) -> TypeVar(User):
+    def get_user_from_session_id(self, s_id: str) -> Union[User, None]:
         """
         Retrieves a user.
         Find_user_by
         """
-        r = AUTH._db._session.query(User)
+        r = self._db._session.query(User)
         ret_value = r.filter_by(session_id=s_id).first()
         return ret_value
 
-    def destroy_session(u_id: str) -> None:
+    def destroy_session(self, u_id: str) -> None:
         """
         Deletes a user.
         """
@@ -108,7 +109,7 @@ class Auth:
         self._db._session.commit()
         return None
 
-    def get_reset_password_token(em: str) -> uuid:
+    def get_reset_password_token(self, em: str) -> Union[str, None]:
         """
         Resets a password.
         """
@@ -119,7 +120,7 @@ class Auth:
         except NoResultFound:
             raise ValueError
 
-    def update_password(r_t: str, p_w: str) -> None:
+    def update_password(self, r_t: str, p_w: str) -> None:
         """
         Updates a password for a user.
         """
