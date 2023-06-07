@@ -4,7 +4,7 @@ App class.
 """
 
 
-from flask import Flask, request, abort, jsonify, make_response
+from flask import Flask, request, abort, jsonify, make_response, redirect
 from auth import Auth
 
 
@@ -75,6 +75,7 @@ def logout():
     try:
         usr = self._db.find_user_by(session_id=s_id)
         AUTH.destroy_session(usr.session_id)
+        return redirect(url_for('route_1'))
     except NoResultFound:
         abort(403)
 
