@@ -122,7 +122,7 @@ def update_password():
         AUTH._db.update_password(r_t, p_w)
         return jsonify({"email": e_m, "message": "Password updated"}), 200
     except NoResultFound:
-        return "Success", 200
+        return "Forbidden", 403
 
 
 if __name__ == "__main__":
