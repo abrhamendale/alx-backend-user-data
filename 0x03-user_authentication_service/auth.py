@@ -112,11 +112,11 @@ class Auth:
         ret_value = r.filter_by(session_id=s_id).first()
         return ret_value
 
-    def destroy_session(self, u_id: str) -> None:
+    def destroy_session(self, u_id: int) -> None:
         """
         Deletes a user.
         """
-        usr = self._db.find_user_by(user_id=u_id)
+        usr: User = self._db.find_user_by(user_id=u_id)
         usr.session_id = None
         self._db._session.commit()
         return None
