@@ -50,11 +50,11 @@ class DB:
         self._session.add(user_1)
         self._session.commit()
         return user_1
-    """
+
     def find_user_by(self, **kwargs) -> TypeVar(User):
-
+        """
         Finds a user by input string em.
-
+        """
         ret_value = self._session.query(User).filter_by(**kwargs).first()
         if ret_value:
             return ret_value
@@ -62,9 +62,9 @@ class DB:
             raise NoResultFound
 
     def update_user(self, u_id: int, **kwargs) -> None:
-
+        """
         Updates a user.
-
+        """
         u = self.find_user_by(id=u_id)
         for key, value in kwargs.items():
             if hasattr(u, key):
@@ -73,4 +73,3 @@ class DB:
                 raise ValueError()
         self._session.commit()
         return None
-        """
