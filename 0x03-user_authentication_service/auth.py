@@ -96,7 +96,7 @@ class Auth:
         """
         try:
             usr = self._db.find_user_by(email=em)
-            s_id = self._generate_uuid()
+            s_id = _generate_uuid()
             usr.session_id = s_id
             self._db._session.commit()
             return s_id
@@ -127,7 +127,7 @@ class Auth:
         """
         try:
             usr = self._db.find_user_by(email=em)
-            usr.reset_token = self._generate_uuid()
+            usr.reset_token = _generate_uuid()
             return usr.reset_token
         except NoResultFound:
             raise ValueError
