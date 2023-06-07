@@ -69,7 +69,7 @@ class Auth:
         """
         generates a uuid.
         """
-        return uuid.uuid4()
+        return str(uuid.uuid4())
 
     def create_session(self, em: str) -> uuid:
         """
