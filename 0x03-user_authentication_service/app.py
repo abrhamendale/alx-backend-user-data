@@ -4,12 +4,20 @@ App class.
 """
 
 
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, abort, jsonify, make_response
 from auth import Auth
 
 
 app = Flask(__name__)
 AUTH = Auth()
+
+
+@app.errorhandler(401)
+def unauthorized(error) -> str:
+    """
+    Unauthorized handler
+    """
+    return jsonify({"error": "Unauthorized"}), 401
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
@@ -39,13 +47,12 @@ def login():
     """
     Login route function.
     """
-    em = request.form.get("email")
-    p_w = request.form.get("password")
-    print("eeemmmaaiiill", em, p_w)
-    if not AUTH._db.find_user_by(email=em):
+    em: str = request.form.get("email")
+    p_w: str = request.form.get("password")
+    if not AUTH.valid_login(em, p_w):
         abort(401)
     else:
-        s_id = AUTH.create_session(em)
+        s_id: str = AUTH.create_session(em)
         resp = make_response({"email": em, "message": "logged in"})
         resp.set_cookie('session_id', str(s_id))
         return resp
