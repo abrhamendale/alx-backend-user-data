@@ -62,12 +62,7 @@ class DB:
         """
         Finds a user by input string em.
         """
-        for key, value in kwargs.items():
-            if not isinstance(key, str):
-                raise NoResultFound
-            if not isinstance(value, str):
-                raise NoResultFound
-        ret_value: User = self._session.query(User).filter_by(**kwargs).first()
+        ret_value = self._session.query(User).filter_by(**kwargs).first()
         if ret_value:
             return ret_value
         else:
