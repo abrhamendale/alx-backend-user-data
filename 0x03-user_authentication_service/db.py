@@ -12,7 +12,9 @@ from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 import bcrypt
 from typing import TypeVar, Union
+"""
 User = TypeVar("User")
+"""
 
 
 class DB:
@@ -49,7 +51,7 @@ class DB:
             return None
         if not isinstance(em, str):
             return None
-        user_1: User = User(email=em, hashed_password=h_p)
+        user_1 = User(email=em, hashed_password=h_p)
         if not user_1:
             return None
         self._session.add(user_1)
