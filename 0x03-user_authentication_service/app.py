@@ -76,6 +76,8 @@ def logout():
     Logs out a user.
     """
     s_id: str = request.cookies.get("session_id")
+    if not isinstance(s_id, str):
+        abort(403)
     try:
         usr = AUTH._db.find_user_by(session_id=s_id)
         AUTH.destroy_session(usr.id)
