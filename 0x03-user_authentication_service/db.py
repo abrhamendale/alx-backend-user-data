@@ -47,6 +47,10 @@ class DB:
         """
         if not em or not h_p:
             return None
+        if not isinstance(em, str):
+            return None
+        if not isinstance(em, str):
+            return None
         user_1 = User(email=em, hashed_password=h_p)
         if not user_1:
             return None
