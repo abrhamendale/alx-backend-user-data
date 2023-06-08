@@ -25,6 +25,8 @@ def _hash_password(p_w: str) -> Any:
     """
     if not p_w:
         return None
+    if not isinstance(p_w, str):
+        return None
     password = p_w
     byte = password.encode('utf-8')
     salt = bcrypt.gensalt()
