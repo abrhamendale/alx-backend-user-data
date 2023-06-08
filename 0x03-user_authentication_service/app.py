@@ -107,12 +107,14 @@ def get_reset_password_token():
     Function to respond to the POST /reset_password route.
     """
     em: str = request.form.get("email")
+    if not isinstance(em, str):
+        abort(403)
     try:
-        usr: User = AUTH._db.find_user_by(email=em)
-        print(usr.email)
+        """usr: User = AUTH._db.find_user_by(email=em)
+        print(usr.email)"""
         r_t: str = Auth.get_reset_password_token(em)
         return jsonify({"email": em, "reset_token": r_t}), 200
-    except NoResultFound:
+    except ValueError:
         abort(403)
 
 
