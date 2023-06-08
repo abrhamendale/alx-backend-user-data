@@ -78,7 +78,6 @@ def logout():
     s_id: str = request.cookies.get("session_id")
     try:
         usr = AUTH._db.find_user_by(session_id=s_id)
-        print(usr.id)
         AUTH.destroy_session(usr.id)
         return redirect(url_for('route_1'))
     except NoResultFound:
@@ -88,9 +87,11 @@ def logout():
 @app.route('/profile', methods=['GET'], strict_slashes=False)
 def profile():
     """
-    /profile route handler.
+    profile route handler.
     """
     s_id: str = request.cookies.get("session_id")
+    if not isinstance(s_id, str):
+        abort(403)
     try:
         usr = AUTH._db.find_user_by(session_id=s_id)
         return jsonify({"email": usr.email}), 200
