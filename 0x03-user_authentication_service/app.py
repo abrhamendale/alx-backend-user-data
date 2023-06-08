@@ -124,10 +124,10 @@ def update_password():
         r_t: str = request.form.get("reset_token")
         p_w: str = request.form.get("new_password")
         e_m: str = request.form.get("email")
-        AUTH._db.update_password(r_t, p_w)
+        AUTH.update_password(r_t, p_w)
         return jsonify({"email": e_m, "message": "Password updated"}), 200
     except NoResultFound:
-        return "Forbidden", 403
+        abort(403)
 
 
 if __name__ == "__main__":
