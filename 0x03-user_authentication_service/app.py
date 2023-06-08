@@ -133,7 +133,7 @@ def update_password():
     try:
         AUTH.update_password(r_t, p_w)
         return jsonify({"email": e_m, "message": "Password updated"}), 200
-    except NoResultFound:
+    except ValueError:
         abort(403)
 
 
