@@ -79,8 +79,7 @@ def logout():
     try:
         usr = AUTH._db.find_user_by(session_id=s_id)
         AUTH.destroy_session(usr.id)
-        return route_1()
-        """redirect(url_for('route_1'))"""
+        return redirect(url_for('route_1'))
     except NoResultFound:
         return jsonify({}), 403
 
