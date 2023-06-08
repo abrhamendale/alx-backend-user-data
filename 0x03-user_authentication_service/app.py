@@ -109,6 +109,7 @@ def get_reset_password_token():
     em: str = request.form.get("email")
     try:
         usr: User = AUTH._db.find_user_by(email=em)
+        print(usr.email)
         r_t: str = Auth.get_reset_password_token(em)
         return jsonify({"email": em, "reset_token": r_t}), 200
     except NoResultFound:
@@ -120,10 +121,16 @@ def update_password():
     """
     Function to respond to PUT /reset_password.
     """
+    r_t: str = request.form.get("reset_token")
+    p_w: str = request.form.get("new_password")
+    e_m: str = request.form.get("email")
+    if not isinstance(r_t, str):
+        abort(403)
+    if not isinstance(p_w, str):
+        abort(403)
+    if not isinstance(e_m, str):
+        abort(403)
     try:
-        r_t: str = request.form.get("reset_token")
-        p_w: str = request.form.get("new_password")
-        e_m: str = request.form.get("email")
         AUTH.update_password(r_t, p_w)
         return jsonify({"email": e_m, "message": "Password updated"}), 200
     except NoResultFound:
