@@ -61,6 +61,7 @@ def login():
     em: str = request.form.get("email")
     p_w: str = request.form.get("password")
     if not AUTH.valid_login(em, p_w):
+        print("11111")
         abort(401)
     else:
         s_id: str = AUTH.create_session(em)
@@ -74,10 +75,11 @@ def logout():
     """
     Logs out a user.
     """
-    s_id: str = request.cookie.get("session_id")
+    s_id: str = request.cookies.get("session_id")
     try:
-        usr = self._db.find_user_by(session_id=s_id)
-        AUTH.destroy_session(usr.session_id)
+        usr = AUTH._db.find_user_by(session_id=s_id)
+        print(usr.id)
+        AUTH.destroy_session(usr.id)
         return redirect(url_for('route_1'))
     except NoResultFound:
         return jsonify({}), 403

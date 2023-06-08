@@ -110,7 +110,7 @@ class Auth:
         Deletes a user.
         """
         try:
-            usr: User = self._db.find_user_by(user_id=u_id)
+            usr: User = self._db.find_user_by(id=u_id)
             usr.session_id = None
             self._db._session.commit()
             return None
