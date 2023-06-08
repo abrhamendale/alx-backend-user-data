@@ -24,7 +24,7 @@ except NoResultFound:
     print("Not found")
 
 try:
-    find_user = my_db.find_user_by(no_email="test2@test.com")
+    find_user = my_db.find_user_by(no_email=[])
     print(find_user.id)
 except InvalidRequestError:
     print("Invalid")
